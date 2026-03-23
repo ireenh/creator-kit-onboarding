@@ -237,6 +237,12 @@ const slides = [
     { color:C.blue, label:"Creator Kit", desc:"The framework — skills, flows, MCP connections. What you install and use." },
     { color:C.teal, label:"Creators Monorepo", desc:"The shared Git repository where all Wix teams store their product artifacts." },
   ], note:"You install Creator Kit once. It works inside the monorepo — or in any other folder." },
+  { section:"Environment", type:"env", title:"Where do you work?", subtitle:"Creator Kit runs inside an AI agent. Pick your interface:", envs:[
+    { name:"VS Code + Claude Code plugin", tag:"recommended", desc:"Install the extension, open your folder, start typing /ck-*. Best for most PMs/UX.", color:C.blue },
+    { name:"Claude Code desktop app", tag:"", desc:"Standalone app — same experience, no VS Code needed.", color:C.teal },
+    { name:"Terminal (claude command)", tag:"", desc:"Run `claude` from any folder in your terminal. Minimal setup.", color:C.gray },
+    { name:"Codex (OpenAI)", tag:"experimental", desc:"Cloud-based agent. Useful for fixing PR comments remotely via @codex in GitHub.", color:C.gray },
+  ], note:"All interfaces support the same /ck-* commands. Skills work identically everywhere." },
   { section:"Your workspace", type:"folder", title:"Where does your work live?", subtitle:"Inside the Creators monorepo, organized by domain:",
     tree:[
       { indent:0, name:"creators/", type:"repo" },
@@ -267,12 +273,6 @@ const slides = [
     { q:"Why a monorepo and not Google Drive?", a:"Version history, review flows, ownership by team, and skills that read each other's output automatically." },
     { q:"Why a monorepo and not our company repo?", a:"Shared visibility across all Wix teams, one place to find anyone's work, and CK skills are optimized for this structure." },
   ]},
-  { section:"Environment", type:"env", title:"Where do you work?", subtitle:"Creator Kit runs inside an AI agent. Pick your interface:", envs:[
-    { name:"VS Code + Claude Code plugin", tag:"recommended", desc:"Install the extension, open your folder, start typing /ck-*. Best for most PMs/UX.", color:C.blue },
-    { name:"Claude Code desktop app", tag:"", desc:"Standalone app — same experience, no VS Code needed.", color:C.teal },
-    { name:"Terminal (claude command)", tag:"", desc:"Run `claude` from any folder in your terminal. Minimal setup.", color:C.gray },
-    { name:"Codex (OpenAI)", tag:"experimental", desc:"Cloud-based agent. Useful for fixing PR comments remotely via @codex in GitHub.", color:C.gray },
-  ], note:"All interfaces support the same /ck-* commands. Skills work identically everywhere." },
   { section:"Environment", type:"checklist", title:"First-time setup", items:[
     { text:"Follow the internal setup presentation — installs Node, Git, SSH key", mono:false },
     { text:'Install Creator Kit:  npx -y --registry "https://npm.dev.wixpress.com" @wix/creator-kit install', mono:true },
