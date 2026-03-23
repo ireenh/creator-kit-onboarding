@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creator Kit — Onboarding</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .deck { background: #fff; border-radius: 16px; box-shadow: 0 4px 32px rgba(0,0,0,0.10); width: 100%; max-width: 780px; min-height: 560px; display: flex; flex-direction: column; overflow: hidden; }
+  .progress { height: 3px; background: #eee; }
+  .progress-bar { height: 100%; background: #185FA5; border-radius: 2px; transition: width 0.3s; }
+  .section-nav { display: flex; gap: 4px; padding: 8px 24px 0; flex-wrap: wrap; border-bottom: 0.5px solid #eee; padding-bottom: 8px; }
+  .section-btn { font-size: 10px; padding: 2px 9px; border-radius: 10px; cursor: pointer; border: 0.5px solid #ddd; background: transparent; color: #999; transition: all 0.15s; }
+  .section-btn.active { border-color: #185FA5; background: #E6F1FB; color: #0C447C; }
+  .slide-counter { margin-left: auto; font-size: 11px; color: #999; align-self: center; }
+  .slide { flex: 1; padding: 20px 28px 12px; display: flex; flex-direction: column; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 8px 24px 16px; }
+  .nav-btn { padding: 5px 16px; font-size: 13px; border-radius: 8px; cursor: pointer; border: 0.5px solid #ddd; background: transparent; color: #333; transition: all 0.15s; }
+  .nav-btn.primary { background: #185FA5; border-color: #185FA5; color: #fff; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .dots { display: flex; gap: 4px; }
+  .dot { height: 5px; border-radius: 3px; background: #ddd; cursor: pointer; transition: all 0.2s; }
+
+  /* Typography */
+  h1 { font-size: 30px; font-weight: 500; color: #111; }
+  h2 { font-size: 21px; font-weight: 500; color: #111; margin-bottom: 14px; }
+  p { color: #555; line-height: 1.6; }
+  .subtitle { font-size: 13px; color: #777; margin-bottom: 12px; }
+  .mono { font-family: "SF Mono", "Fira Code", monospace; }
+
+  /* Note */
+  .note { margin-top: 10px; padding: 8px 14px; background: #EEEDFE; border-radius: 8px; font-size: 12px; color: #3C3489; line-height: 1.5; border-left: 3px solid #7F77DD; }
+
+  /* Hero */
+  .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px; padding: 28px 0; }
+  .hero-icon { width: 52px; height: 52px; border-radius: 14px; background: #E6F1FB; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .hero-cta { margin-top: 8px; padding: 9px 18px; background: #EEEDFE; border-radius: 10px; font-size: 13px; color: #3C3489; font-family: monospace; }
+
+  /* Bullets */
+  .bullet-list { display: flex; flex-direction: column; gap: 9px; }
+  .bullet-item { display: flex; gap: 12px; padding: 10px 14px; background: #f8f8f8; border-radius: 9px; border: 0.5px solid #eee; }
+  .bullet-icon { font-size: 17px; line-height: 1.4; flex-shrink: 0; }
+  .bullet-text { font-size: 13px; color: #222; line-height: 1.6; }
+
+  /* Two col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .col-card { border-radius: 12px; padding: 16px; border-left: 3px solid; }
+  .col-label { font-size: 11px; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .col-desc { font-size: 13px; color: #333; line-height: 1.6; }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: 7px; }
+  .faq-item { border-radius: 9px; overflow: hidden; border: 0.5px solid #eee; }
+  .faq-q { padding: 7px 14px; background: #E6F1FB; font-size: 13px; font-weight: 500; color: #0C447C; }
+  .faq-a { padding: 7px 14px; background: #f8f8f8; font-size: 12px; color: #333; line-height: 1.5; }
+
+  /* Env */
+  .env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .env-card { border-radius: 10px; padding: 12px 14px; border-left: 3px solid; }
+  .env-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .tag { font-size: 10px; color: #fff; padding: 1px 7px; border-radius: 10px; background: #185FA5; }
+  .env-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Checklist */
+  .check-list { display: flex; flex-direction: column; gap: 7px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; background: #f8f8f8; border-radius: 8px; border: 0.5px solid #eee; }
+  .check-box { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #185FA5; background: #fff; flex-shrink: 0; margin-top: 2px; }
+  .check-text { font-size: 13px; color: #222; line-height: 1.5; }
+
+  /* Folder tree */
+  .tree { background: #1e1e2e; border-radius: 10px; padding: 14px 18px; font-family: monospace; font-size: 12px; }
+  .tree-row { display: flex; gap: 8px; margin-bottom: 4px; }
+
+  /* Session */
+  .session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .session-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; padding: 4px 10px; border-radius: 6px; display: inline-block; }
+  .step-row { display: flex; gap: 8px; margin-bottom: 6px; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: #fff; flex-shrink: 0; margin-top: 2px; }
+  .step-card { padding: 5px 10px; background: #f8f8f8; border-radius: 7px; flex: 1; border: 0.5px solid #eee; }
+  .step-cmd { font-family: monospace; font-size: 10px; margin-bottom: 1px; }
+  .step-desc { font-size: 11px; color: #666; line-height: 1.4; }
+
+  /* CK-new modes */
+  .modes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mode-card { display: flex; gap: 12px; align-items: center; padding: 12px 14px; background: #E6F1FB; border-radius: 9px; border: 0.5px solid #185FA5; }
+  .mode-icon { font-size: 22px; flex-shrink: 0; }
+  .mode-label { font-size: 13px; font-weight: 500; color: #0C447C; }
+
+  /* CK-new outputs */
+  .output-list { display: flex; flex-direction: column; gap: 8px; }
+  .output-item { display: flex; gap: 12px; align-items: flex-start; padding: 9px 14px; background: #f8f8f8; border-radius: 9px; border: 0.5px solid #eee; }
+  .output-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+  .output-label { font-size: 13px; font-weight: 500; color: #222; margin-bottom: 2px; }
+  .output-mono { font-family: monospace; font-size: 10px; color: #0C447C; background: #E6F1FB; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+  .output-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Pipeline */
+  .pipeline-list { display: flex; flex-direction: column; gap: 6px; }
+  .phase-row { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 9px; border: 0.5px solid; }
+  .phase-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: #fff; flex-shrink: 0; }
+  .phase-name { font-size: 13px; font-weight: 500; min-width: 130px; }
+  .phase-cmd { font-family: monospace; font-size: 10px; opacity: 0.8; min-width: 160px; }
+  .phase-desc { font-size: 12px; opacity: 0.65; }
+
+  /* Skills ref */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .skill-group { border-radius: 10px; padding: 11px 13px; border-left: 3px solid; }
+  .skill-group-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .skill-row { display: flex; gap: 6px; margin-bottom: 5px; align-items: flex-start; }
+  .skill-cmd { font-family: monospace; font-size: 10px; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; white-space: nowrap; line-height: 1.8; }
+  .skill-out { font-size: 11px; color: #666; line-height: 1.6; }
+
+  /* Parallel skills */
+  .parallel-list { display: flex; flex-direction: column; gap: 8px; }
+  .parallel-row { display: flex; border-radius: 9px; overflow: hidden; border: 0.5px solid; }
+  .parallel-icon { width: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .parallel-body { flex: 1; padding: 8px 12px; background: #f8f8f8; }
+  .parallel-title { font-size: 13px; font-weight: 500; color: #222; margin-bottom: 2px; }
+  .parallel-why { font-size: 11px; color: #666; line-height: 1.4; }
+  .parallel-type { flex-shrink: 0; padding: 8px 10px; background: #f8f8f8; display: flex; align-items: center; }
+  .type-badge { font-size: 10px; padding: 2px 8px; border-radius: 8px; }
+
+  /* CK-help terminal */
+  .terminal { background: #1a1a2e; border-radius: 10px; padding: 14px 16px; font-family: monospace; font-size: 11px; line-height: 1.7; color: #cdd6f4; }
+  .terminal-title { text-align: center; margin-bottom: 12px; }
+  .terminal-title span { font-size: 13px; font-weight: 700; letter-spacing: 0.15em; color: #cba6f7; background: #313244; padding: 6px 18px; border-radius: 6px; display: inline-block; }
+  .terminal-section { color: #a6e3a1; margin-bottom: 4px; }
+  .terminal-grid { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 10px; }
+  .terminal-cmd { color: #89dceb; padding-right: 8px; }
+  .terminal-desc { color: #a6adc8; }
+  .terminal-more { margin-top: 8px; color: #6c7086; font-size: 10px; }
+
+  /* Closing */
+  .closing-list { display: flex; flex-direction: column; gap: 9px; }
+  .closing-item { display: flex; gap: 12px; padding: 10px 14px; background: #f8f8f8; border-radius: 9px; border: 0.5px solid #eee; }
+  .closing-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+  .closing-label { font-size: 13px; font-weight: 500; color: #222; margin-bottom: 2px; }
+  .closing-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Git */
+  .git-list { display: flex; flex-direction: column; gap: 6px; }
+  .git-row { display: flex; border-radius: 9px; overflow: hidden; border: 0.5px solid #eee; }
+  .git-term { width: 80px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 6px; gap: 3px; }
+  .git-term-name { font-size: 12px; font-weight: 500; }
+  .git-term-badge { font-size: 9px; padding: 1px 5px; border-radius: 8px; }
+  .git-desc { flex: 1; padding: 9px 14px; background: #f8f8f8; display: flex; align-items: center; font-size: 12px; color: #222; line-height: 1.5; }
+
+  /* Ownership */
+  .ownership-list { display: flex; flex-direction: column; gap: 9px; }
+  .ownership-item { display: flex; gap: 12px; padding: 10px 14px; background: #f8f8f8; border-radius: 9px; border: 0.5px solid #eee; }
+  .ownership-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+  .ownership-label { font-size: 13px; font-weight: 500; color: #222; margin-bottom: 2px; }
+  .ownership-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Collab */
+  .collab-list { display: flex; flex-direction: column; gap: 8px; }
+  .collab-row { display: flex; gap: 12px; align-items: flex-start; }
+  .collab-num { width: 24px; height: 24px; border-radius: 50%; background: #185FA5; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+  .collab-card { flex: 1; padding: 7px 12px; background: #f8f8f8; border-radius: 8px; border: 0.5px solid #eee; }
+  .collab-header { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  .collab-title { font-size: 13px; font-weight: 500; color: #222; }
+  .collab-cmd { font-family: monospace; font-size: 10px; color: #0C447C; background: #E6F1FB; padding: 1px 6px; border-radius: 4px; }
+  .collab-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+  /* Parallel projects */
+  .parallel-visual { display: flex; gap: 10px; margin-bottom: 12px; }
+  .pv-card { flex: 1; border-radius: 9px; padding: 10px 14px; border-left: 3px solid; }
+  .pv-label { font-family: monospace; font-size: 12px; font-weight: 500; }
+  .pv-branch { font-size: 11px; opacity: 0.7; margin-top: 3px; }
+  .pv-rules { display: flex; flex-direction: column; gap: 7px; }
+  .pv-rule { display: flex; gap: 10px; padding: 8px 12px; background: #f8f8f8; border-radius: 8px; border: 0.5px solid #eee; }
+  .pv-rule-icon { font-size: 16px; flex-shrink: 0; }
+  .pv-rule-title { font-size: 13px; font-weight: 500; color: #222; }
+  .pv-rule-desc { font-size: 12px; color: #666; }
+
+  /* Handoff */
+  .handoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .handoff-check { display: flex; gap: 8px; margin-bottom: 6px; }
+  .handoff-check-icon { color: #0F6E56; font-size: 13px; line-height: 1.4; }
+  .handoff-check-text { font-size: 13px; color: #222; line-height: 1.5; }
+
+  /* Coming soon */
+  .coming-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .coming-group { border-radius: 10px; padding: 12px 14px; border-left: 3px solid; }
+  .coming-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .coming-item { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+  .coming-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .coming-text { font-size: 12px; color: #222; line-height: 1.4; }
+
+  /* Reframe */
+  .reframe-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+  .reframe-card { border-radius: 10px; padding: 12px 14px; border-left: 3px solid; }
+  .reframe-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .reframe-item { font-size: 12px; color: #666; padding: 3px 0; }
+  .reframe-point { padding: 10px 14px; background: #f8f8f8; border-radius: 9px; margin-bottom: 8px; border: 0.5px solid #eee; font-size: 13px; color: #222; line-height: 1.6; }
+
+  /* Cheatsheet */
+  .cheat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cheat-group { border-radius: 10px; padding: 11px 13px; border-left: 3px solid; }
+  .cheat-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
+  .cheat-row { display: flex; gap: 6px; margin-bottom: 5px; align-items: flex-start; }
+  .cheat-cmd { font-family: monospace; font-size: 10px; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; white-space: nowrap; line-height: 1.8; }
+  .cheat-desc { font-size: 11px; color: #666; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="progress"><div class="progress-bar" id="progress"></div></div>
+  <div class="section-nav" id="section-nav"></div>
+  <div class="slide" id="slide"></div>
+  <div class="nav">
+    <button class="nav-btn" id="back" onclick="go(-1)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn primary" id="next" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+const C = {
+  blue:  { bg:"#E6F1FB", border:"#185FA5", text:"#0C447C" },
+  teal:  { bg:"#E1F5EE", border:"#0F6E56", text:"#085041" },
+  gray:  { bg:"#F1EFE8", border:"#5F5E5A", text:"#444441" },
+  green: { bg:"#EAF3DE", border:"#3B6D11", text:"#27500A" },
+  coral: { bg:"#FAECE7", border:"#993C1D", text:"#712B13" },
+};
+
+const slides = [
+  { section:"Intro", type:"hero", title:"Creator Kit", subtitle:"From zero to your first merged artifact — everything in one place" },
+  { section:"Intro", type:"bullets", title:"What is Creator Kit?", items:[
+    { icon:"🤖", text:"Turns your AI agent (Claude Code, Cursor…) into a full product development partner" },
+    { icon:"🏗️", text:"Covers the full lifecycle — research, strategy, spec, UX concepts, handoff" },
+    { icon:"🔗", text:"Wired into Wix internal systems — Customer Care, data warehouse, code repos, glossaries" },
+    { icon:"📦", text:"Works in the Creators monorepo, any code repo, or any local folder" },
+  ]},
+  { section:"Intro", type:"two-col", title:"Two things to know", cols:[
+    { color:C.blue, label:"Creator Kit", desc:"The framework — skills, flows, MCP connections. What you install and use." },
+    { color:C.teal, label:"Creators Monorepo", desc:"The shared Git repository where all Wix teams store their product artifacts." },
+  ], note:"You install Creator Kit once. It works inside the monorepo — or in any other folder." },
+  { section:"Your workspace", type:"reframe", title:"Your product work is now called artifacts",
+    before:{ label:"Before", items:["Brief.docx in Google Drive","Research notes in Confluence","Spec shared via email","Prototype link in Slack"] },
+    after:{ label:"Now — artifacts in GitHub", items:["project-brief.md","research-user-voice.md","product-spec.md","ux-concepts.html"] },
+    point:"Everything you used to scatter across Drive, Confluence, and Slack is now an artifact — a versioned file that lives in GitHub alongside everyone else's work.",
+    why:"This is why the onboarding focuses on GitHub, branches, and PRs. It's not about code. It's about getting comfortable managing your product work in that environment." },
+  { section:"Your workspace", type:"outputs", title:"Artifacts are .md files", subtitle:"Markdown is plain text with formatting. Not all tools render it — here's what does:", methods:[
+    { icon:"✅", label:"GitHub", desc:"Renders .md natively. Anyone with the PR link sees a clean formatted view — best for sharing." },
+    { icon:"✅", label:"VS Code", desc:"Open the file → Cmd+Shift+V for rendered preview. Good for reviewing locally." },
+    { icon:"⚠️", label:"Most other tools (Slack, email, Finder)", desc:"Show raw text with #, *, ** symbols. Still readable, just not pretty." },
+    { icon:"📄", label:"Google Docs", desc:"Tools → Preferences → Enable Markdown, then paste. Renders once — edits there won't sync back automatically." },
+    { icon:"📊", label:"Presentation", desc:"/ck-artifact-to-presentation generates a .pptx. Drag into Google Drive to share." },
+  ], note:"Gdoc and slides are NOT the source of truth. If reviewers comment there, ask the agent to sync changes back to the .md file." },
+  { section:"Your workspace", type:"folder", title:"Where does your work live?", subtitle:"Inside the Creators monorepo, organized by domain:",
+    tree:[
+      { indent:0, name:"creators/", type:"repo" },
+      { indent:1, name:"projects/", type:"dir" },
+      { indent:2, name:"stores/", type:"domain" },
+      { indent:2, name:"bookings/", type:"domain" },
+      { indent:2, name:"my-company/", type:"domain", hl:true },
+      { indent:3, name:"your-feature-name/", type:"feature", hl:true },
+      { indent:4, name:"artifacts/", type:"dir", desc:"← AI outputs land here" },
+      { indent:4, name:"context/", type:"dir", desc:"← your reference files" },
+    ], note:"/ck-new creates your feature folder automatically. No need to do it manually." },
+  { section:"Your workspace", type:"faq", title:"About the monorepo — quick answers", items:[
+    { q:"Can other creators see my outputs?", a:"Yes — once merged to master. While on your branch, only people with the link can see it." },
+    { q:"Can anyone read my agent conversations?", a:"No. Conversations stay local. Only the files you commit and push are shared." },
+    { q:"Will this affect my Mac performance?", a:"No. Git is just text files. The agent runs in the cloud." },
+    { q:"Why a monorepo and not Google Drive?", a:"Version history, review flows, ownership by team, and skills that read each other's output automatically." },
+    { q:"Why a monorepo and not our company repo?", a:"Shared visibility across all Wix teams, one place to find anyone's work, and CK skills are optimized for this structure." },
+  ]},
+  { section:"Environment", type:"env", title:"Where do you work?", subtitle:"Creator Kit runs inside an AI agent. Pick your interface:", envs:[
+    { name:"VS Code + Claude Code plugin", tag:"recommended", desc:"Install the extension, open your folder, start typing /ck-*. Best for most PMs/UX.", color:C.blue },
+    { name:"Claude Code desktop app", tag:"", desc:"Standalone app — same experience, no VS Code needed.", color:C.teal },
+    { name:"Terminal (claude command)", tag:"", desc:"Run `claude` from any folder in your terminal. Minimal setup.", color:C.gray },
+    { name:"Codex (OpenAI)", tag:"experimental", desc:"Cloud-based agent. Useful for fixing PR comments remotely via @codex in GitHub.", color:C.gray },
+  ], note:"All interfaces support the same /ck-* commands. Skills work identically everywhere." },
+  { section:"Environment", type:"checklist", title:"First-time setup", items:[
+    { text:"Follow the internal setup presentation — installs Node, Git, SSH key", mono:false },
+    { text:'Install Creator Kit:  npx -y --registry "https://npm.dev.wixpress.com" @wix/creator-kit install', mono:true },
+    { text:"Clone the Creators monorepo:  git clone git@github.com:wix-private/creators.git", mono:true },
+    { text:"Connect to VPN (required for internal MCP tools)", mono:false },
+    { text:"Authenticate MCPs in your agent (Settings → Tools & MCP → Connect)", mono:false },
+  ], note:"MCPs can disconnect over time — re-authenticate if a skill stops working. Do setup once; every session after starts with /ck-utility-master." },
+  { section:"Your first project", type:"session", title:"Every session — step by step",
+    newProject:[
+      { n:"1", cmd:"/ck-utility-master", desc:"Sync to latest master — always start here" },
+      { n:"2", cmd:"/ck-new", desc:"Navigate to projects/{your-domain}/ then run. Creates folder, brief, and branch." },
+      { n:"3", cmd:"Do your work", desc:"Run flows or individual skills" },
+      { n:"4", cmd:"/ck-utility-pr", desc:"Push to GitHub — for review OR just to save remotely" },
+    ],
+    returning:[
+      { n:"1", cmd:"/ck-utility-master", desc:"Sync to latest" },
+      { n:"2", cmd:"Open your feature folder", desc:"In your agent interface" },
+      { n:"3", cmd:"/ck-status", desc:"See where you left off and what to do next" },
+      { n:"4", cmd:"Continue working", desc:"Skills pick up from your existing artifacts" },
+    ]},
+  { section:"Your first project", type:"cknew-modes", title:"Starting a new project — /ck-new", subtitle:"Tell it what you're working on — drop in a Jira ticket, doc, or screenshot. Works for any starting point:", modes:[
+    { icon:"🏗️", label:"Creating a feature" },
+    { icon:"🔍", label:"Investigating a problem" },
+    { icon:"⚖️", label:"Making a decision" },
+    { icon:"💡", label:"Quick concept check" },
+    { icon:"🗺️", label:"Exploring a space" },
+  ]},
+  { section:"Your first project", type:"cknew-outputs", title:"What /ck-new creates", subtitle:"After the 3-min conversation, everything is set up for all downstream skills:", outputs:[
+    { icon:"📄", label:"Project brief", mono:"artifacts/project-brief-{name}.md", desc:"The single source of truth. Every skill reads this automatically — you never re-explain context." },
+    { icon:"📁", label:"artifacts/ folder", mono:"artifacts/", desc:"Where every skill writes its output. Organized by phase." },
+    { icon:"📥", label:"context/ folder", mono:"context/", desc:"Drop your docs, screenshots, Jira exports, Slack threads here. Skills pick them up automatically." },
+    { icon:"🌿", label:"Feature branch", mono:"branch: your-feature-name", desc:"Your work stays off master until you're ready to share." },
+  ]},
+  { section:"Your first project", type:"two-col", title:"Flows vs. individual skills", cols:[
+    { color:C.blue, label:"Flow skills (recommended)", mono:true, desc:"Chains multiple skills, handles sequencing.\n\n/ck-flow-discovery\n/ck-flow-product\n/ck-flow-ux-concepts\n/ck-flow-final-ux" },
+    { color:C.teal, label:"Individual skills", mono:true, desc:"Run any skill directly when you know what you need.\n\n/ck-research-competitors\n/ck-data-query\n/ck-ux-concepts\n/ck-handoff" },
+  ], note:"Not sure which to run? Use /ck-help to browse all skills, or /ck-status to get a recommendation." },
+  { section:"The pipeline", type:"pipeline", title:"The 6-phase pipeline", subtitle:"A map, not a requirement. Run the full flow or jump to any skill independently.", phases:[
+    { num:"1", name:"Initiation", cmd:"/ck-new", desc:"Define the problem, audience, opportunity", bg:"#E6F1FB", stroke:"#185FA5", text:"#0C447C" },
+    { num:"2", name:"Discovery", cmd:"/ck-flow-discovery", desc:"Users, competitors, data, platform capabilities", bg:"#E1F5EE", stroke:"#0F6E56", text:"#085041" },
+    { num:"3", name:"Product Sculpting", cmd:"/ck-flow-product", desc:"Strategy, spec, success metrics", bg:"#F1EFE8", stroke:"#5F5E5A", text:"#444441" },
+    { num:"4", name:"UX Concepts", cmd:"/ck-flow-ux-concepts", desc:"5 distinct clickable HTML prototypes", bg:"#EAF3DE", stroke:"#3B6D11", text:"#27500A" },
+    { num:"5", name:"All Screens", cmd:"/ck-flow-final-ux", desc:"Full UX spec, content, edge cases", bg:"#E6F1FB", stroke:"#185FA5", text:"#0C447C" },
+    { num:"6", name:"Handoff", cmd:"/ck-handoff", desc:"Dev-ready package — everything in one doc", bg:"#E1F5EE", stroke:"#0F6E56", text:"#085041" },
+  ]},
+  { section:"The pipeline", type:"skills-ref", title:"Skills by phase", subtitle:"Every skill works independently. Run /ck-help in your agent to see this live.", phases:[
+    { name:"Discovery", color:C.teal, skills:[
+      { cmd:"/ck-research-user-voice", out:"User voice report" },
+      { cmd:"/ck-research-competitors", out:"Competitive landscape" },
+      { cmd:"/ck-data-query", out:"Data analysis" },
+      { cmd:"/ck-data-plan", out:"Metrics plan" },
+      { cmd:"/ck-research-wix-internal", out:"Internal capabilities" },
+      { cmd:"/ck-research-summary", out:"Research summary" },
+    ]},
+    { name:"Product Sculpting", color:C.blue, skills:[
+      { cmd:"/ck-product-strategy", out:"Product strategy" },
+      { cmd:"/ck-product-spec", out:"Functional spec" },
+      { cmd:"/ck-product-tractor", out:"Tractor wireframe" },
+    ]},
+    { name:"UX Concepts", color:C.green, skills:[
+      { cmd:"/ck-ux-research", out:"UX patterns research" },
+      { cmd:"/ck-ux-concepts", out:"5 HTML prototypes" },
+      { cmd:"/ck-ux-current-product", out:"Current state prototype" },
+    ]},
+    { name:"All Screens", color:C.gray, skills:[
+      { cmd:"/ck-ux-all-screens", out:"Full UX spec" },
+      { cmd:"/ck-ux-content", out:"Microcopy + labels" },
+      { cmd:"/ck-ux-edge-cases", out:"Edge case analysis" },
+    ]},
+  ]},
+  { section:"The pipeline", type:"parallel-skills", title:"Skills in sequence vs. parallel", subtitle:"The key question: do they need each other's output?", rows:[
+    { scenario:"Run discovery, then product strategy", type:"sequence", ok:true, why:"Product strategy reads the discovery output automatically. Run one, review, then run the next." },
+    { scenario:"Run competitors + data query in the same session", type:"parallel", ok:true, why:"They write to different files and don't depend on each other. Both fine at the same time." },
+    { scenario:"Two agent windows, different projects", type:"parallel", ok:true, why:"Different folders, different branches. Completely isolated — no conflict." },
+  ], note:"Rule of thumb: sequence = skills that build on each other. Parallel = skills or projects that are independent." },
+  { section:"The pipeline", type:"ck-help", title:"/ck-help — your skill directory", subtitle:"Type /ck-help in your agent anytime. Here's what it looks like:" },
+  { section:"Closing a session", type:"closing", title:"Wrapping up for the day", subtitle:"Before you close your agent — make sure your work is safe.", steps:[
+    { icon:"💾", label:"Ask the agent to commit", desc:'"Commit my changes" — saves a local snapshot. Do this after every meaningful artifact.' },
+    { icon:"☁️", label:"Push to GitHub", desc:'"Push my changes" or run /ck-utility-pr — uploads to GitHub. Now your work is safe even if your laptop dies.' },
+    { icon:"📋", label:"Open a draft PR if you haven't yet", desc:"A draft PR = work in progress. Your team won't review it yet but it's backed up remotely." },
+    { icon:"🔄", label:"Next session: start with /ck-utility-master", desc:"Syncs latest changes. Then open your folder and run /ck-status to pick up where you left off." },
+  ], note:"Commit = local only. Push = on GitHub but private to your branch. Merge = visible to everyone." },
+  { section:"Git & saving", type:"git", title:"Git — what you actually need to know", subtitle:"The agent handles all commands. But knowing local vs. remote matters.", concepts:[
+    { term:"Branch", local:true, desc:"Your own working copy. Created by /ck-new, named after your feature. Changes here don't affect anyone else." },
+    { term:"Commit", local:true, desc:"A local save point. Only on your machine. Ask the agent: 'commit these changes'. Do it often." },
+    { term:"Push", local:false, desc:"Uploads your commits to GitHub — on your branch. Still private to people with the link. Not yet on master." },
+    { term:"PR", local:false, desc:"Pull Request. Created with /ck-utility-pr. Used for review OR just to back up your work remotely." },
+    { term:"Merge", local:false, desc:"Approved PR → lands on master. Visible to all creators. This is 'production' for your artifacts." },
+  ]},
+  { section:"Git & saving", type:"ownership", title:"PRs, ownership, and self-review", items:[
+    { icon:"💾", label:"PR isn't only for review", desc:"You can open a PR just to push your work to GitHub and back it up. Draft mode = tells your team you're not ready for review yet." },
+    { icon:"✅", label:"Can I approve my own PR?", desc:"Yes — if you own the folder. Each domain folder has an ownership tag that controls who can review and merge." },
+    { icon:"🏷️", label:"Ownership tags", desc:"Every projects/{company}/ folder is protected by a CODEOWNERS entry. Only your team can merge into your folder." },
+    { icon:"🔔", label:"How reviewers get notified", desc:"Auto email/Slack notification goes out when you open a PR. Or just share the GitHub link directly." },
+  ], note:"No ownership tag yet for your folder? Ask in #creator-kit — takes 5 minutes to set up." },
+  { section:"Git & saving", type:"collab", title:"When you want a review", steps:[
+    { n:"1", cmd:"/ck-utility-pr", label:"Open a PR and share it", desc:"Creates a PR. Share the link or let auto-notification go out. Use Draft if not ready for review." },
+    { n:"2", cmd:"GitHub", label:"Reviewer comments", desc:"Opens Files Changed → comments inline → Submit review (Comment / Approve / Request changes)." },
+    { n:"3", cmd:"/ck-utility-fix-pr-comments", label:"Address feedback", desc:"Claude reads PR comments and helps fix each one. Push updates when done." },
+    { n:"4", cmd:"Approve & Merge", label:"Merged to master", desc:"Artifacts visible to all creators. Delete the branch afterwards." },
+  ], tip:"Use @codex in a GitHub comment to have Codex fix something in the cloud — no need to open your editor." },
+  { section:"Parallel work", type:"parallel-projects", title:"Working on parallel projects", subtitle:"The repo = shared space. Your branch = your private workspace. They don't interfere.",
+    visual:{ left:{ label:"feature-a/", branch:"branch: donation-qr", color:C.blue }, right:{ label:"feature-b/", branch:"branch: print-calendar", color:C.teal } },
+    rules:[
+      { icon:"📂", label:"One folder per project", desc:"Open the folder you want to work on. The agent works in that folder's context only." },
+      { icon:"💾", label:"Commit before switching", desc:"Always ask the agent to commit before opening a different project." },
+      { icon:"🔄", label:"Switching is just opening a folder", desc:"Open the other feature folder → run /ck-status to see where you left off." },
+      { icon:"🔃", label:"Sync when returning", desc:"Run /ck-utility-sync to pull in any changes from master since you were last here." },
+    ]},
+  { section:"Parallel work", type:"handoff", title:"/ck-handoff — the bridge to builders", subtitle:"Packages everything into a single developer-ready document.",
+    what:["All design decisions and rationale","Full UX spec with flows, states, edge cases","Content guide — microcopy, labels, error messages","Research summary and strategic context","Open questions and implementation notes"],
+    who:"Whether the builder is you (PreX+) or another team — they get everything in one place, no Slack archaeology.",
+    coming:"More skills in the oven: quality checklist, legal review, rollout planner, A/B test plan, and more." },
+  { section:"Parallel work", type:"coming-soon", title:"What's coming next", subtitle:"Creator Kit is actively growing. These skills are in development:",
+    groups:[
+      { label:"Data & insights", color:C.blue, items:["BI events planning","Success metrics review","A/B test plan"] },
+      { label:"Rollout & launch", color:C.teal, items:["Rollout planner","Legal review","Translations & i18n"] },
+      { label:"Quality & process", color:C.green, items:["Quality checklist","Tech design review","Knowledge base queries"] },
+    ], note:"Have a skill idea? Share it in #creator-kit — the framework is built with creator input." },
+  { section:"Cheat sheet", type:"cheatsheet", title:"Quick reference", groups:[
+    { label:"Every session", color:C.blue, items:[
+      { cmd:"/ck-utility-master", desc:"Start fresh — sync to latest" },
+      { cmd:"/ck-new", desc:"Start a new project" },
+      { cmd:"/ck-status", desc:"Where am I? What's next?" },
+      { cmd:"/ck-utility-sync", desc:"Pull latest into your branch" },
+      { cmd:"/ck-help", desc:"Browse all skills" },
+    ]},
+    { label:"Do the work", color:C.teal, items:[
+      { cmd:"/ck-flow-discovery", desc:"User voice, competitors, data" },
+      { cmd:"/ck-flow-product", desc:"Strategy, spec, metrics" },
+      { cmd:"/ck-flow-ux-concepts", desc:"5 clickable prototypes" },
+      { cmd:"/ck-flow-final-ux", desc:"Full UX spec + edge cases" },
+      { cmd:"/ck-handoff", desc:"Package for dev" },
+    ]},
+    { label:"Save & collaborate", color:C.green, items:[
+      { cmd:"/ck-utility-pr", desc:"Push to GitHub / open for review" },
+      { cmd:"/ck-utility-fix-pr-comments", desc:"Address reviewer feedback" },
+      { cmd:"/ck-utility-code-review", desc:"Quality check before submitting" },
+    ]},
+    { label:"Share outputs", color:C.gray, items:[
+      { cmd:"/ck-artifact-to-presentation", desc:"Turn .md into .pptx" },
+      { cmd:"Cmd+Shift+V (VS Code)", desc:"Preview .md rendered" },
+      { cmd:"GitHub PR link", desc:"Best way to share any artifact" },
+    ]},
+  ]},
+  { section:"Cheat sheet", type:"hero", title:"You're ready", subtitle:"Open your feature folder → /ck-utility-master → /ck-new", cta:"#creator-kit on Slack for anything" },
+];
+
+const SECTIONS = [...new Set(slides.map(s=>s.section))];
+let idx = 0;
+
+function note(text) { return `<div class="note">${text}</div>`; }
+
+function render(s) {
+  if (s.type==="hero") return `
+    <div class="hero">
+      <div class="hero-icon">🛠️</div>
+      <h1>${s.title}</h1>
+      <p style="font-size:15px;max-width:460px;text-align:center">${s.subtitle}</p>
+      ${s.cta?`<div class="hero-cta">${s.cta}</div>`:''}
+    </div>`;
+
+  if (s.type==="bullets") return `
+    <h2>${s.title}</h2>
+    <div class="bullet-list">
+      ${s.items.map(i=>`<div class="bullet-item"><span class="bullet-icon">${i.icon}</span><span class="bullet-text">${i.text}</span></div>`).join('')}
+    </div>`;
+
+  if (s.type==="two-col") return `
+    <h2>${s.title}</h2>
+    <div class="two-col">
+      ${s.cols.map(col=>`
+        <div class="col-card" style="background:${col.color.bg};border-color:${col.color.border}">
+          <div class="col-label" style="color:${col.color.text}">${col.label}</div>
+          ${col.mono ? col.desc.split('\n\n').map((part,j)=>j===0?`<div class="col-desc">${part}</div>`:`<div>${part.split('\n').map(cmd=>`<div class="mono" style="font-size:12px;color:${col.color.text};padding:2px 0">${cmd}</div>`).join('')}</div>`).join('') : `<div class="col-desc">${col.desc}</div>`}
+        </div>`).join('')}
+    </div>
+    ${s.note?note(s.note):''}`;
+
+  if (s.type==="reframe") return `
+    <h2>${s.title}</h2>
+    <div class="reframe-cols">
+      <div class="reframe-card" style="background:${C.gray.bg};border-color:${C.gray.border}">
+        <div class="reframe-label" style="color:${C.gray.text}">${s.before.label}</div>
+        ${s.before.items.map(i=>`<div class="reframe-item" style="text-decoration:line-through;opacity:0.6">${i}</div>`).join('')}
+      </div>
+      <div class="reframe-card" style="background:${C.blue.bg};border-color:${C.blue.border}">
+        <div class="reframe-label" style="color:${C.blue.text}">${s.after.label}</div>
+        ${s.after.items.map(i=>`<div class="reframe-item mono" style="color:${C.blue.text}">${i}</div>`).join('')}
+      </div>
+    </div>
+    <div class="reframe-point">${s.point}</div>
+    ${note(s.why)}`;
+
+  if (s.type==="outputs") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="output-list" style="gap:7px">
+      ${s.methods.map(m=>`
+        <div style="display:flex;gap:10px;padding:8px 12px;background:#f8f8f8;border-radius:8px;border:0.5px solid #eee">
+          <span style="font-size:14px;line-height:1.5;flex-shrink:0;width:20px;text-align:center">${m.icon}</span>
+          <div><span style="font-size:13px;font-weight:500;color:#222">${m.label} — </span><span style="font-size:12px;color:#666">${m.desc}</span></div>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="folder") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="tree">
+      ${s.tree.map(n=>`
+        <div class="tree-row" style="padding-left:${n.indent*18}px">
+          <span style="color:${n.hl?'#FAC775':n.type==='repo'?'#5DCAA5':n.type==='feature'?'#85B7EB':'#888'}">
+            ${n.type==='repo'?'📦 ':n.type==='domain'?'📁 ':n.type==='feature'?'📂 ':'  '}${n.name}
+          </span>
+          ${n.desc?`<span style="color:#5DCAA5;font-size:11px">${n.desc}</span>`:''}
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="faq") return `
+    <h2>${s.title}</h2>
+    <div class="faq-list">
+      ${s.items.map(i=>`
+        <div class="faq-item">
+          <div class="faq-q">${i.q}</div>
+          <div class="faq-a">${i.a}</div>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="env") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="env-grid">
+      ${s.envs.map(e=>`
+        <div class="env-card" style="background:${e.color.bg};border-color:${e.color.border}">
+          <div class="env-name" style="color:${e.color.text}">${e.name}${e.tag?`<span class="tag">${e.tag}</span>`:''}</div>
+          <div class="env-desc">${e.desc}</div>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="checklist") return `
+    <h2>${s.title}</h2>
+    <div class="check-list">
+      ${s.items.map(i=>`
+        <div class="check-item">
+          <div class="check-box"></div>
+          <span class="check-text ${i.mono?'mono':''}" style="font-size:${i.mono?11:13}px">${i.text}</span>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="session") return `
+    <h2>${s.title}</h2>
+    <div class="session-grid">
+      <div>
+        <div class="session-label" style="background:${C.blue.bg};color:${C.blue.text}">New project</div>
+        ${s.newProject.map(st=>`
+          <div class="step-row">
+            <div class="step-num" style="background:${C.blue.border}">${st.n}</div>
+            <div class="step-card">
+              <div class="step-cmd" style="color:${C.blue.text}">${st.cmd}</div>
+              <div class="step-desc">${st.desc}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div>
+        <div class="session-label" style="background:${C.teal.bg};color:${C.teal.text}">Returning to existing work</div>
+        ${s.returning.map(st=>`
+          <div class="step-row">
+            <div class="step-num" style="background:${C.teal.border}">${st.n}</div>
+            <div class="step-card">
+              <div class="step-cmd" style="color:${C.teal.text}">${st.cmd}</div>
+              <div class="step-desc">${st.desc}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  if (s.type==="cknew-modes") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="modes-grid">
+      ${s.modes.map(m=>`
+        <div class="mode-card">
+          <span class="mode-icon">${m.icon}</span>
+          <span class="mode-label">${m.label}</span>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="cknew-outputs") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="output-list">
+      ${s.outputs.map(o=>`
+        <div class="output-item">
+          <span class="output-icon">${o.icon}</span>
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+              <span class="output-label">${o.label}</span>
+              <span class="output-mono">${o.mono}</span>
+            </div>
+            <div class="output-desc">${o.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="pipeline") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="pipeline-list">
+      ${s.phases.map(p=>`
+        <div class="phase-row" style="background:${p.bg};border-color:${p.stroke}">
+          <div class="phase-num" style="background:${p.stroke}">${p.num}</div>
+          <span class="phase-name" style="color:${p.text}">${p.name}</span>
+          <span class="phase-cmd mono" style="color:${p.text}">${p.cmd}</span>
+          <span class="phase-desc" style="color:${p.text}">${p.desc}</span>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="skills-ref") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="skills-grid">
+      ${s.phases.map(ph=>`
+        <div class="skill-group" style="background:${ph.color.bg};border-color:${ph.color.border}">
+          <div class="skill-group-label" style="color:${ph.color.text}">${ph.name}</div>
+          ${ph.skills.map(sk=>`
+            <div class="skill-row">
+              <span class="skill-cmd" style="color:${ph.color.text};background:${ph.color.border}22">${sk.cmd}</span>
+              <span class="skill-out">→ ${sk.out}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="parallel-skills") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="parallel-list">
+      ${s.rows.map(r=>`
+        <div class="parallel-row" style="border-color:${r.ok?C.teal.border:C.coral.border}">
+          <div class="parallel-icon" style="background:${r.ok?C.teal.bg:C.coral.bg}">${r.ok?'✅':'🚫'}</div>
+          <div class="parallel-body">
+            <div class="parallel-title">${r.scenario}</div>
+            <div class="parallel-why">${r.why}</div>
+          </div>
+          <div class="parallel-type">
+            <span class="type-badge" style="background:${r.type==='sequence'?C.blue.bg:C.teal.bg};color:${r.type==='sequence'?C.blue.text:C.teal.text}">${r.type}</span>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="ck-help") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="terminal">
+      <div class="terminal-title"><span>CREATOR'S HELPER</span></div>
+      <div class="terminal-section">🚀 Initiation</div>
+      <div class="terminal-grid">
+        ${[["  /ck-new","Entry point for any creation work."],["  /ck-help","Browse all installed Creator Kit skills."],["  /ck-status","Show current project status and suggest next steps."]].map(([cmd,desc])=>`<span class="terminal-cmd">${cmd}</span><span class="terminal-desc">${desc}</span>`).join('')}
+      </div>
+      <div class="terminal-section">⚡ Full Flows</div>
+      <div class="terminal-grid">
+        ${[["  /ck-flow-discovery","Guided research pipeline."],["  /ck-flow-product","Strategy + spec workflow."],["  /ck-flow-ux-concepts","Generate 5 UX prototypes."],["  /ck-flow-final-ux","Full UX spec end-to-end."]].map(([cmd,desc])=>`<span class="terminal-cmd">${cmd}</span><span class="terminal-desc">${desc}</span>`).join('')}
+      </div>
+      <div class="terminal-more">↓ scroll for more phases…</div>
+    </div>
+    ${note('Think of /ck-help as the menu and /ck-status as the waiter who tells you what\'s good today.')}`;
+
+  if (s.type==="closing") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="closing-list">
+      ${s.steps.map(st=>`
+        <div class="closing-item">
+          <span class="closing-icon">${st.icon}</span>
+          <div>
+            <div class="closing-label">${st.label}</div>
+            <div class="closing-desc">${st.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="git") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="git-list">
+      ${s.concepts.map(c=>`
+        <div class="git-row">
+          <div class="git-term" style="background:${c.local?C.blue.bg:C.teal.bg}">
+            <span class="git-term-name" style="color:${c.local?C.blue.text:C.teal.text}">${c.term}</span>
+            <span class="git-term-badge" style="color:${c.local?C.blue.border:C.teal.border};background:${c.local?C.blue.border+'22':C.teal.border+'22'}">${c.local?'local':'remote'}</span>
+          </div>
+          <div class="git-desc">${c.desc}</div>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="ownership") return `
+    <h2>${s.title}</h2>
+    <div class="ownership-list">
+      ${s.items.map(i=>`
+        <div class="ownership-item">
+          <span class="ownership-icon">${i.icon}</span>
+          <div>
+            <div class="ownership-label">${i.label}</div>
+            <div class="ownership-desc">${i.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="collab") return `
+    <h2>${s.title}</h2>
+    <div class="collab-list">
+      ${s.steps.map(st=>`
+        <div class="collab-row">
+          <div class="collab-num">${st.n}</div>
+          <div class="collab-card">
+            <div class="collab-header">
+              <span class="collab-title">${st.label}</span>
+              <span class="collab-cmd">${st.cmd}</span>
+            </div>
+            <div class="collab-desc">${st.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${note(s.tip)}`;
+
+  if (s.type==="parallel-projects") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="parallel-visual">
+      ${[s.visual.left,s.visual.right].map(v=>`
+        <div class="pv-card" style="background:${v.color.bg};border-color:${v.color.border}">
+          <div class="pv-label" style="color:${v.color.text}">${v.label}</div>
+          <div class="pv-branch" style="color:${v.color.text}">${v.branch}</div>
+        </div>`).join('')}
+    </div>
+    <div class="pv-rules">
+      ${s.rules.map(r=>`
+        <div class="pv-rule">
+          <span class="pv-rule-icon">${r.icon}</span>
+          <div><span class="pv-rule-title">${r.label} — </span><span class="pv-rule-desc">${r.desc}</span></div>
+        </div>`).join('')}
+    </div>`;
+
+  if (s.type==="handoff") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="handoff-grid">
+      <div>
+        <div style="font-size:11px;font-weight:500;color:${C.teal.text};text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">What it packages</div>
+        ${s.what.map(i=>`<div class="handoff-check"><span class="handoff-check-icon">✓</span><span class="handoff-check-text">${i}</span></div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:${C.teal.bg};border-radius:10px;padding:12px 14px;border-left:3px solid ${C.teal.border}">
+          <div style="font-size:11px;font-weight:500;color:${C.teal.text};text-transform:uppercase;margin-bottom:6px">Who receives it</div>
+          <p style="font-size:13px;color:#333;line-height:1.5">${s.who}</p>
+        </div>
+        <div style="background:${C.blue.bg};border-radius:10px;padding:12px 14px;border-left:3px solid ${C.blue.border}">
+          <div style="font-size:11px;font-weight:500;color:${C.blue.text};text-transform:uppercase;margin-bottom:6px">Coming soon</div>
+          <p style="font-size:12px;color:#666;line-height:1.5">${s.coming}</p>
+        </div>
+      </div>
+    </div>`;
+
+  if (s.type==="coming-soon") return `
+    <h2>${s.title}</h2>
+    <p class="subtitle">${s.subtitle}</p>
+    <div class="coming-grid">
+      ${s.groups.map(g=>`
+        <div class="coming-group" style="background:${g.color.bg};border-color:${g.color.border}">
+          <div class="coming-label" style="color:${g.color.text}">${g.label}</div>
+          ${g.items.map(i=>`
+            <div class="coming-item">
+              <div class="coming-dot" style="background:${g.color.border}"></div>
+              <span class="coming-text">${i}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+    ${note(s.note)}`;
+
+  if (s.type==="cheatsheet") return `
+    <h2>${s.title}</h2>
+    <div class="cheat-grid">
+      ${s.groups.map(g=>`
+        <div class="cheat-group" style="background:${g.color.bg};border-color:${g.color.border}">
+          <div class="cheat-label" style="color:${g.color.text}">${g.label}</div>
+          ${g.items.map(i=>`
+            <div class="cheat-row">
+              <span class="cheat-cmd mono" style="color:${g.color.text};background:${g.color.border}22">${i.cmd}</span>
+              <span class="cheat-desc">${i.desc}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`;
+
+  return `<h2>${s.title||''}</h2>`;
+}
+
+function update() {
+  const s = slides[idx];
+  const total = slides.length;
+  document.getElementById('progress').style.width = `${((idx+1)/total)*100}%`;
+  document.getElementById('slide').innerHTML = render(s);
+
+  // Section nav
+  const nav = document.getElementById('section-nav');
+  const sectionStarts = {};
+  slides.forEach((sl,i) => { if (!sectionStarts[sl.section]) sectionStarts[sl.section] = i; });
+  nav.innerHTML = SECTIONS.map(sec=>`<button class="section-btn ${s.section===sec?'active':''}" onclick="jumpTo(${sectionStarts[sec]})">${sec}</button>`).join('') + `<span class="slide-counter">${idx+1}/${total}</span>`;
+
+  // Dots
+  const dots = document.getElementById('dots');
+  dots.innerHTML = slides.map((_,i)=>`<div class="dot" onclick="jumpTo(${i})" style="width:${i===idx?16:5}px;background:${i===idx?'#185FA5':'#ddd'}"></div>`).join('');
+
+  // Buttons
+  document.getElementById('back').disabled = idx===0;
+  const nextBtn = document.getElementById('next');
+  nextBtn.disabled = idx===total-1;
+  nextBtn.className = idx===total-1 ? 'nav-btn' : 'nav-btn primary';
+}
+
+function go(dir) { idx = Math.max(0, Math.min(slides.length-1, idx+dir)); update(); }
+function jumpTo(i) { idx = i; update(); }
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key===' ') go(1);
+  if (e.key==='ArrowLeft') go(-1);
+});
+
+update();
+</script>
+</body>
+</html>
