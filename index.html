@@ -254,6 +254,13 @@ const slides = [
       { indent:4, name:"artifacts/", type:"dir", desc:"← AI outputs land here" },
       { indent:4, name:"context/", type:"dir", desc:"← your reference files" },
     ], note:"/ck-new creates your feature folder automatically. No need to do it manually." },
+  { section:"Your workspace", type:"faq", title:"About the monorepo — quick answers", items:[
+    { q:"Can other creators see my outputs?", a:"Yes — once merged to master. While on your branch, only people with the link can see it." },
+    { q:"Can anyone read my agent conversations?", a:"No. Conversations stay local. Only the files you commit and push are shared." },
+    { q:"Will this affect my Mac performance?", a:"No. Git is just text files. The agent runs in the cloud." },
+    { q:"Why a monorepo and not Google Drive?", a:"Version history, review flows, ownership by team, and skills that read each other's output automatically." },
+    { q:"Why a monorepo and not our company repo?", a:"Shared visibility across all Wix teams, one place to find anyone's work, and CK skills are optimized for this structure." },
+  ]},
   { section:"Your workspace", type:"reframe", title:"Your product work is now called artifacts",
     before:{ label:"Before", items:["Brief.docx in Google Drive","Research notes in Confluence","Spec shared via email","Prototype link in Slack"] },
     after:{ label:"Now — artifacts in GitHub", items:["project-brief.md","research-user-voice.md","product-spec.md","ux-concepts.html"] },
@@ -266,13 +273,6 @@ const slides = [
     { icon:"📄", label:"Google Docs", desc:"Tools → Preferences → Enable Markdown, then paste. Renders once — edits there won't sync back automatically." },
     { icon:"📊", label:"Presentation", desc:"/ck-artifact-to-presentation generates a .pptx. Drag into Google Drive to share." },
   ], note:"Gdoc and slides are NOT the source of truth. If reviewers comment there, ask the agent to sync changes back to the .md file." },
-  { section:"Your workspace", type:"faq", title:"About the monorepo — quick answers", items:[
-    { q:"Can other creators see my outputs?", a:"Yes — once merged to master. While on your branch, only people with the link can see it." },
-    { q:"Can anyone read my agent conversations?", a:"No. Conversations stay local. Only the files you commit and push are shared." },
-    { q:"Will this affect my Mac performance?", a:"No. Git is just text files. The agent runs in the cloud." },
-    { q:"Why a monorepo and not Google Drive?", a:"Version history, review flows, ownership by team, and skills that read each other's output automatically." },
-    { q:"Why a monorepo and not our company repo?", a:"Shared visibility across all Wix teams, one place to find anyone's work, and CK skills are optimized for this structure." },
-  ]},
   { section:"Environment", type:"checklist", title:"First-time setup", items:[
     { text:"Follow the internal setup presentation — installs Node, Git, SSH key", mono:false },
     { text:'Install Creator Kit:  npx -y --registry "https://npm.dev.wixpress.com" @wix/creator-kit install', mono:true },
